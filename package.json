@@ -1,0 +1,24 @@
+{
+  "name": "doacoes-e-voluntariados-para-ong",
+  "version": "1.0.0",
+  "description": "",
+  "main": "express.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arybueno/Doacoes-e-voluntariados-para-ONG.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/arybueno/Doacoes-e-voluntariados-para-ONG/issues"
+  },
+  "homepage": "https://github.com/arybueno/Doacoes-e-voluntariados-para-ONG#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
