@@ -45,6 +45,17 @@ app.get('/', (req,res) => {
     res.send('API de doações')
 })
 
+app.get('/campanha', (req,res)=> {
+    res.json(campanha);
+})
+
+app.post('/campanha', (req,res)=>{
+    const novaCampanha = req.body;
+    campanha.push(novaCampanha);
+
+    res.status(201).json(novaCampanha);
+})
+
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
 })
