@@ -91,6 +91,12 @@ app.delete('/campanhas/:id', (req, res) => {
     res.send('Campanha removida com sucesso');
 });
 
+
+app.get('/doacoes', (req,res)=> {
+    res.json(doacao);
+});
+
+
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
 })
