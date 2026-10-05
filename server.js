@@ -111,7 +111,7 @@ app.post('/doacoes', (req,res)=> {
 
 app.put('/doacoes/:id',(req,res)=>{
     const id = Number(req.params.id);
-    
+
     const doacaoEncontrada =doacao.find(d => d.id === id);
     doacaoEncontrada.valor= req.body.valor;
     doacaoEncontrada.campanhaId=req.body.campanhaId;
@@ -119,6 +119,14 @@ app.put('/doacoes/:id',(req,res)=>{
     doacaoEncontrada.data = req.body.data;
 
     res.json(doacaoEncontrada);
+});
+
+app.delete('/doacoes/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const indice = doacao.findIndex(d => d.id === id);
+    doacao.splice(indice, 1);
+    res.send('Doação removida com sucesso');
 });
 
 app.listen(PORT, () =>{
