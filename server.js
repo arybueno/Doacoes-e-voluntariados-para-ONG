@@ -56,6 +56,31 @@ app.post('/campanha', (req,res)=>{
     res.status(201).json(novaCampanha);
 })
 
+app.get('/campanha', (req,res)=> {
+    res.json(campanha);
+})
+
+app.get('/campanhas/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const campanhaEncontrada = campanha.find(c => c.id === id);
+
+    res.json(campanhaEncontrada);
+});
+
+app.put('/campanhas/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const campanhaEncontrada = campanha.find(c => c.id === id);
+
+    campanhaEncontrada.titulo = req.body.titulo;
+    campanhaEncontrada.descricao = req.body.descricao;
+    campanhaEncontrada.meta = req.body.meta;
+    campanhaEncontrada.status = req.body.status;
+
+    res.json(campanhaEncontrada);
+});
+
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
 })
