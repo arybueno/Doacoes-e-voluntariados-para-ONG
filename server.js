@@ -81,6 +81,16 @@ app.put('/campanhas/:id', (req, res) => {
     res.json(campanhaEncontrada);
 });
 
+app.delete('/campanhas/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const indice = campanha.findIndex(c => c.id === id);
+
+    campanha.splice(indice, 1);
+
+    res.send('Campanha removida com sucesso');
+});
+
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
 })
