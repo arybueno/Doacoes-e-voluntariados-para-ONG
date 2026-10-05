@@ -110,6 +110,11 @@ app.post('/doacoes', (req, res) => {
     if (!campanhaEncontrada) {
         return res.status(400).send('Campanha não encontrada');
     }
+
+    if (campanhaEncontrada === 'FECHADA') {
+         return res.status(400).send('Campanha fechada');
+    }
+    }
     doacao.push(novaDoacao);
     res.status(201).json(novaDoacao);
 });
