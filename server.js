@@ -96,6 +96,11 @@ app.get('/doacoes', (req,res)=> {
     res.json(doacao);
 });
 
+app.get('/doacoes/:id', (req,res)=> {
+    const id = Number(req.params.id);
+    const doacaoEncontrada = doacao.find(d => d.id === id);
+    res.json(doacaoEncontrada);
+});
 
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
