@@ -137,6 +137,20 @@ app.delete('/doacoes/:id', (req, res) => {
     res.send('Doação removida com sucesso');
 });
 
+app.post('/acoes/:id/voluntarios', (req, res) => {
+    const id = Number(req.params.id);
+    const voluntarioId = req.body.voluntarioId;
+    const acaoEncontrada = acao.find(a => a.id === id);
+    if (!acaoEncontrada) {
+        return res.status(404).send('Ação não encontrada');
+    }
+    if (acaoEncontrada.voluntarios.includes(voluntarioId)) {
+        return res.status(400).send('Voluntário já participa desta ação');
+    }
+    acaoEncontrada.voluntarios.push(voluntarioId);
+    res.json(acaoEncontrada);
+});
+
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
 })
