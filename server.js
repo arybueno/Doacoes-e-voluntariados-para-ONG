@@ -1,6 +1,8 @@
 const express= require('express')
 
+
 const app = express();
+app.use(express.json());
 const PORT = 3000;
 
 let campanha =[{
@@ -20,8 +22,8 @@ let doador =[{
 let doacao =[{
     id:30,
     valor: 2000.00,
-    campanhaid: 10,
-    doadorid: 20,
+    campanhaId: 10,
+    doadorId: 20,
     data: "11/11/2001"
 }]
 
@@ -45,19 +47,15 @@ app.get('/', (req,res) => {
     res.send('API de doações')
 })
 
-app.get('/campanha', (req,res)=> {
+app.get('/campanhas', (req,res)=> {
     res.json(campanha);
 })
 
-app.post('/campanha', (req,res)=>{
+app.post('/campanhas', (req,res)=>{
     const novaCampanha = req.body;
     campanha.push(novaCampanha);
 
     res.status(201).json(novaCampanha);
-})
-
-app.get('/campanha', (req,res)=> {
-    res.json(campanha);
 })
 
 app.get('/campanhas/:id', (req, res) => {
@@ -111,10 +109,10 @@ app.post('/doacoes', (req, res) => {
         return res.status(400).send('Campanha não encontrada');
     }
 
-    if (campanhaEncontrada === 'FECHADA') {
+    if (campanhaEncontrada.status === 'FECHADA') {
          return res.status(400).send('Campanha fechada');
     }
-    }
+    
     doacao.push(novaDoacao);
     res.status(201).json(novaDoacao);
 });
