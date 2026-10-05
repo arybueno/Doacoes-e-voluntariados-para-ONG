@@ -102,9 +102,14 @@ app.get('/doacoes/:id', (req,res)=> {
     res.json(doacaoEncontrada);
 });
 
-app.post('/doacoes', (req,res)=> {
+app.post('/doacoes', (req, res) => {
     const novaDoacao = req.body;
-
+    const campanhaEncontrada = campanha.find(
+        c => c.id === novaDoacao.campanhaId
+    );
+    if (!campanhaEncontrada) {
+        return res.status(400).send('Campanha não encontrada');
+    }
     doacao.push(novaDoacao);
     res.status(201).json(novaDoacao);
 });
