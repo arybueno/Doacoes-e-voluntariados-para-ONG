@@ -102,6 +102,13 @@ app.get('/doacoes/:id', (req,res)=> {
     res.json(doacaoEncontrada);
 });
 
+app.post('/doacoes', (req,res)=> {
+    const novaDoacao = req.body;
+
+    doacao.push(novaDoacao);
+    res.status(201).json(novaDoacao);
+});
+
 app.listen(PORT, () =>{
     console.log(`servidor rodando na porta http://localhost:${PORT}`)
 })
