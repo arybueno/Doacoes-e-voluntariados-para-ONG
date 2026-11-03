@@ -1,4 +1,16 @@
 # Doacoes-e-voluntariados-para-ONG
+API desenvolvida com Node.js e Express para gerenciar campanhas de arrecadação, doações e ações de voluntariado em ONGs.
+
+## Instalação
+
+Para instalar as dependências do projeto, execute no terminal:
+ - npm install
+
+## Execução
+
+Para iniciar o servidor, execute:
+
+node server.js
 
 # Endpoints
 

@@ -65,6 +65,10 @@ app.get('/campanhas/:id', (req, res) => {
 
     const campanhaEncontrada = campanha.find(c => c.id === id);
 
+    if (!campanhaEncontrada) {
+    return res.status(404).send('Campanha não encontrada')
+}
+
     res.json(campanhaEncontrada);
 });
 
@@ -72,6 +76,10 @@ app.put('/campanhas/:id', (req, res) => {
     const id = Number(req.params.id);
 
     const campanhaEncontrada = campanha.find(c => c.id === id);
+
+    if (!campanhaEncontrada) {
+    return res.status(404).send('Campanha não encontrada');
+}
 
     campanhaEncontrada.titulo = req.body.titulo;
     campanhaEncontrada.descricao = req.body.descricao;
@@ -86,6 +94,10 @@ app.delete('/campanhas/:id', (req, res) => {
 
     const indice = campanha.findIndex(c => c.id === id);
 
+    if (indice === -1) {
+    return res.status(404).send('Campanha não encontrada');
+}
+
     campanha.splice(indice, 1);
 
     res.send('Campanha removida com sucesso');
@@ -99,6 +111,11 @@ app.get('/doacoes', (req,res)=> {
 app.get('/doacoes/:id', (req,res)=> {
     const id = Number(req.params.id);
     const doacaoEncontrada = doacao.find(d => d.id === id);
+
+    if (!doacaoEncontrada) {
+        return res.status(404).send('Doação não encontrada');
+    }
+
     res.json(doacaoEncontrada);
 });
 
@@ -123,6 +140,11 @@ app.put('/doacoes/:id',(req,res)=>{
     const id = Number(req.params.id);
 
     const doacaoEncontrada =doacao.find(d => d.id === id);
+
+     if (!doacaoEncontrada) {
+        return res.status(404).send('Doação não encontrada');
+    }
+
     doacaoEncontrada.valor= req.body.valor;
     doacaoEncontrada.campanhaId=req.body.campanhaId;
     doacaoEncontrada.doadorId =req.body.doadorId;
@@ -135,6 +157,11 @@ app.delete('/doacoes/:id', (req, res) => {
     const id = Number(req.params.id);
 
     const indice = doacao.findIndex(d => d.id === id);
+
+    if (indice === -1) {
+        return res.status(404).send('Doação não encontrada');
+    }
+
     doacao.splice(indice, 1);
     res.send('Doação removida com sucesso');
 });
