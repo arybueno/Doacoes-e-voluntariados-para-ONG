@@ -1,2 +1,10 @@
 import { Router } from "express";
-import 
+import * as controller from '../controllers/campanha.controller.js';
+
+const router = Router();
+
+router.get('/', controller.listar);
+router.get('/:id', controller.buscarPorId); 
+router.post('/', controller.criar);
+
+export default router;
