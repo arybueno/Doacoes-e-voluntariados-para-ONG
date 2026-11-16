@@ -25,7 +25,7 @@ export async function buscarPorId(req, res) {
 
 export async function criar(req, res) {
   try {
-    const { titulo, descricao, meta, status } = req.body ?? {};
+    const { nome,email } = req.body ?? {};
     const doador = await service.cadastrarDoador(nome,email);
     res.status(201).json(doador);
   } catch (error) {
