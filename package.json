@@ -1,14 +1,14 @@
 {
   "name": "doacoes-e-voluntariados-para-ong",
   "version": "1.0.0",
-  "description": "",
-  "main": "express.js",
+  "description": "API para gerenciar campanhas, doações e ações de voluntariado de ONGs",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:up": "docker start mongo-tarefas || docker run -d --name mongo-tarefas -p 127.0.0.1:27017:27017 -v mongo-tarefas-data:/data/db mongo:8",
-    "db:down": "docker stop mongo-tarefas",
-    "db:logs": "docker logs -f mongo-tarefas",
-    "db:reset": "docker rm -f mongo-tarefas; docker volume rm mongo-tarefas-data",
+    "db:up": "docker start mongo-ong || docker run -d --name mongo-ong -p 127.0.0.1:27017:27017 -v mongo-ong-data:/data/db mongo:8",
+    "db:down": "docker stop mongo-ong",
+    "db:logs": "docker logs -f mongo-ong",
+    "db:reset": "docker rm -f mongo-ong; docker volume rm mongo-ong-data",
     "predev": "npm run db:up",
     "dev": "node --watch src/server.js",
     "start": "node src/server.js"
@@ -20,7 +20,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/arybueno/Doacoes-e-voluntariados-para-ONG/issues"
   },

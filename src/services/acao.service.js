@@ -1,4 +1,4 @@
-import * as model from '../models/acao.model.js'
+import * as model from '../models/acao.model.js';
 
 export class ErroDeValidacao extends Error {
     constructor(mensagem) {
@@ -10,10 +10,10 @@ export class ErroDeValidacao extends Error {
 function paraFormatoDaApi(documento) {
     return {
         id: documento._id.toHexString(),
-        titulo: documento.titulo,
+        nome: documento.nome,
         descricao: documento.descricao,
-        meta: documento.meta,
-        status: documento.status
+        data: documento.data,
+        voluntarios: documento.voluntarios
     };
 }
 
@@ -30,20 +30,20 @@ export async function buscarPorId(id) {
     return paraFormatoDaApi(documento);
 }
 
-export async function cadastrarAcao(titulo, descricao, meta, status) {
-    if (!titulo || !descricao || !meta || !status) {
-        throw new ErroDeValidacao("Todos os campos (titulo, descricao, meta, status) são obrigatórios.");
+export async function cadastrarAcao(nome, descricao, data, voluntarios = []) {
+    if (!nome || !descricao || !data) {
+        throw new ErroDeValidacao("Os campos nome, descricao e data são obrigatórios.");
     }
 
-    if (typeof meta !== 'number' || meta <= 0) {
-        throw new ErroDeValidacao("A meta deve ser um número maior que zero.");
+    if (!Array.isArray(voluntarios)) {
+        throw new ErroDeValidacao("O campo voluntarios deve ser uma lista.");
     }
 
     const novaAcao = {
-        titulo: titulo,
-        descricao: descricao,
-        meta: meta,
-        status: status
+        nome,
+        descricao,
+        data,
+        voluntarios
     };
 
     const insertedId = await model.inserir(novaAcao);

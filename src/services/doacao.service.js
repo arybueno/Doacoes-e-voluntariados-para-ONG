@@ -1,4 +1,5 @@
-import * as model from '../models/doacao.model.js'
+import * as model from '../models/doacao.model.js';
+import * as campanhaModel from '../models/campanha.model.js';
 
 export class ErroDeValidacao extends Error {
     constructor(mensagem) {
@@ -30,15 +31,23 @@ export async function buscarPorId(id) {
     return paraFormatoDaApi(documento);
 }
 
-export async function cadastrarDoador(nome,email) {
-    if (!valor || !campanhaId || !doadorId || !data ) {
-        throw new ErroDeValidacao("Todos os campos são obrigatórios.");
+export async function cadastrarDoacao(valor, campanhaId, doadorId, data) {
+    if (!valor || !campanhaId || !doadorId || !data) {
+        throw new ErroDeValidacao("Todos os campos (valor, campanhaId, doadorId, data) são obrigatórios.");
     }
 
     if (typeof valor !== 'number' || valor <= 0) {
         throw new ErroDeValidacao("O valor da doação deve ser maior que zero.");
     }
 
+    const campanha = await campanhaModel.buscarPorId(campanhaId);
+    if (!campanha) {
+        throw new ErroDeValidacao("Campanha não encontrada.");
+    }
+
+    if (campanha.status === 'FECHADA') {
+        throw new ErroDeValidacao("Campanha fechada.");
+    }
 
     const novaDoacao = {
         valor,

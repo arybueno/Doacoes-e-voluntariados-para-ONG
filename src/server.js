@@ -1,185 +1,23 @@
-const express= require('express')
+import 'dotenv/config';
+import app from './app.js';
+import { conectar, desconectar } from './config/database.js';
 
-
-const app = express();
-
-app.use(express.json());
-
-const PORT = 3000;
-
-let campanha =[{
-    id: 10,
-    titulo: "Animais campus IFMS",
-    descricao: "arrecadação de fundos para remédios destinado aos cachorros do IFMS",
-    meta: 12000.00,
-    status: "ABERTA"
-}]
-
-let doador =[{
-    id: 20,
-    nome: "Helder da Silva",
-    email: "helder@gmail.com"
-}]
-
-let doacao =[{
-    id:30,
-    valor: 2000.00,
-    campanhaId: 10,
-    doadorId: 20,
-    data: "11/11/2001"
-}]
-
-let voluntario=[{
-    id: 40,
-    nome: "Lucas Alves",
-    email: "lucas@gmail.com",
-    telefone: "(67)99999-9999"
-}]
-
-let acao=[{
-    id:50,
-    nome: "Entrega de alimentos",
-    descricao: "Distribuição das cestas arrecadadas",
-    data: "10/10/2026",
-    voluntarios: [40]
-}]
-
-
-app.get('/', (req,res) => {
-    res.send('API de doações')
-})
-
-app.get('/campanhas', (req,res)=> {
-    res.json(campanha);
-})
-
-app.post('/campanhas', (req,res)=>{
-    const novaCampanha = req.body;
-    campanha.push(novaCampanha);
-
-    res.status(201).json(novaCampanha);
-})
-
-app.get('/campanhas/:id', (req, res) => {
-    const id = Number(req.params.id);
-
-    const campanhaEncontrada = campanha.find(c => c.id === id);
-
-    if (!campanhaEncontrada) {
-    return res.status(404).send('Campanha não encontrada')
+try {
+  await conectar();
+  console.log('Conectado ao MongoDB');
+} catch (error) {
+  console.error('Não foi possível conectar ao MongoDB. Verifique MONGODB_URI, MONGODB_DB_NAME e se o servidor está em execução.');
+  console.error(error.message);
+  process.exit(1);
 }
 
-    res.json(campanhaEncontrada);
-});
+const servidor = app.listen(3000, () => console.log('API em http://localhost:3000'));
 
-app.put('/campanhas/:id', (req, res) => {
-    const id = Number(req.params.id);
-
-    const campanhaEncontrada = campanha.find(c => c.id === id);
-
-    if (!campanhaEncontrada) {
-    return res.status(404).send('Campanha não encontrada');
+async function encerrar() {
+  servidor.close();
+  await desconectar();
+  process.exit(0);
 }
 
-    campanhaEncontrada.titulo = req.body.titulo;
-    campanhaEncontrada.descricao = req.body.descricao;
-    campanhaEncontrada.meta = req.body.meta;
-    campanhaEncontrada.status = req.body.status;
-
-    res.json(campanhaEncontrada);
-});
-
-app.delete('/campanhas/:id', (req, res) => {
-    const id = Number(req.params.id);
-
-    const indice = campanha.findIndex(c => c.id === id);
-
-    if (indice === -1) {
-    return res.status(404).send('Campanha não encontrada');
-}
-
-    campanha.splice(indice, 1);
-
-    res.send('Campanha removida com sucesso');
-});
-
-
-app.get('/doacoes', (req,res)=> {
-    res.json(doacao);
-});
-
-app.get('/doacoes/:id', (req,res)=> {
-    const id = Number(req.params.id);
-    const doacaoEncontrada = doacao.find(d => d.id === id);
-
-    if (!doacaoEncontrada) {
-        return res.status(404).send('Doação não encontrada');
-    }
-
-    res.json(doacaoEncontrada);
-});
-
-app.post('/doacoes', (req, res) => {
-    const novaDoacao = req.body;
-    const campanhaEncontrada = campanha.find(
-        c => c.id === novaDoacao.campanhaId
-    );
-    if (!campanhaEncontrada) {
-        return res.status(400).send('Campanha não encontrada');
-    }
-
-    if (campanhaEncontrada.status === 'FECHADA') {
-         return res.status(400).send('Campanha fechada');
-    }
-    
-    doacao.push(novaDoacao);
-    res.status(201).json(novaDoacao);
-});
-
-app.put('/doacoes/:id',(req,res)=>{
-    const id = Number(req.params.id);
-
-    const doacaoEncontrada =doacao.find(d => d.id === id);
-
-     if (!doacaoEncontrada) {
-        return res.status(404).send('Doação não encontrada');
-    }
-
-    doacaoEncontrada.valor= req.body.valor;
-    doacaoEncontrada.campanhaId=req.body.campanhaId;
-    doacaoEncontrada.doadorId =req.body.doadorId;
-    doacaoEncontrada.data = req.body.data;
-
-    res.json(doacaoEncontrada);
-});
-
-app.delete('/doacoes/:id', (req, res) => {
-    const id = Number(req.params.id);
-
-    const indice = doacao.findIndex(d => d.id === id);
-
-    if (indice === -1) {
-        return res.status(404).send('Doação não encontrada');
-    }
-
-    doacao.splice(indice, 1);
-    res.send('Doação removida com sucesso');
-});
-
-app.post('/acoes/:id/voluntarios', (req, res) => {
-    const id = Number(req.params.id);
-    const voluntarioId = req.body.voluntarioId;
-    const acaoEncontrada = acao.find(a => a.id === id);
-    if (!acaoEncontrada) {
-        return res.status(404).send('Ação não encontrada');
-    }
-    if (acaoEncontrada.voluntarios.includes(voluntarioId)) {
-        return res.status(400).send('Voluntário já participa desta ação');
-    }
-    acaoEncontrada.voluntarios.push(voluntarioId);
-    res.json(acaoEncontrada);
-});
-
-app.listen(PORT, () =>{
-    console.log(`servidor rodando na porta http://localhost:${PORT}`)
-})
+process.on('SIGINT', encerrar);
+process.on('SIGTERM', encerrar);
